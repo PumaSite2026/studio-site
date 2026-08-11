@@ -1,0 +1,42 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "projects"
+    label: "Projects"
+    files:
+      - name: "projects"
+        label: "Project List"
+        file: "content/projects.json"
+        fields:
+          - label: "Projects"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.n}} — {{fields.name}}"
+            fields:
+              - {label: "Number (01, 02...)", name: "n", widget: "string"}
+              - {label: "Short Name", name: "name", widget: "string"}
+              - {label: "Full Title", name: "title", widget: "string"}
+              - {label: "Description", name: "desc", widget: "text"}
+              - label: "Tags"
+                name: "tags"
+                widget: "list"
+                field: {label: "Tag", name: "tag", widget: "string"}
+              - {label: "Image", name: "image", widget: "image", required: false, hint: "Optional — if you add an image it replaces the placeholder graphic"}
+              - {label: "Embedded video link (Vimeo player URL)", name: "video", widget: "string", required: false, hint: "e.g. https://player.vimeo.com/video/123456789 — shown instead of the image if set"}
+
+  - name: "settings"
+    label: "General Settings"
+    files:
+      - name: "site"
+        label: "Main Content"
+        file: "content/settings.json"
+        fields:
+          - {label: "Hero Title (homepage)", name: "heroTitle", widget: "text", hint: "Each new line is displayed as a separate line"}
+          - {label: "Subtitle", name: "heroSub", widget: "text"}
+          - {label: "Contact Email", name: "email", widget: "string"}
+          - {label: "Location", name: "location", widget: "string"}

@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "n": "01", "name": "Nava", "title": "Nava — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "", "video": "" },
+    { "n": "02", "name": "Prime", "title": "Prime — Fintech App", "desc": "Product design and component system for a personal finance app.", "tags": ["UI/UX", "Product"], "image": "", "video": "" },
+    { "n": "03", "name": "The Barn", "title": "The Barn — Chef's Restaurant", "desc": "Full identity, menu, and signage for a new restaurant in the heart of the city.", "tags": ["Branding", "Print"], "image": "", "video": "" },
+    { "n": "04", "name": "Kōline", "title": "Kōline — Mobility Startup", "desc": "Sharp tech branding for a shared electric-scooter company.", "tags": ["Branding", "Digital"], "image": "", "video": "" },
+    { "n": "05", "name": "Aura", "title": "Aura — Art Festival", "desc": "A dynamic visual language for an annual urban light festival.", "tags": ["Campaign", "Motion"], "image": "", "video": "" },
+    { "n": "06", "name": "Studio 12", "title": "Studio 12 — Art Gallery", "desc": "A minimal identity and portfolio site for an independent gallery.", "tags": ["Branding", "Website"], "image": "", "video": "" }
+  ]
+}

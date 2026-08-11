@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio — Design Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Netlify Identity: handles the login link from invite/confirmation emails -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+<style>
+  :root{
+    --ink:#121210;
+    --paper:#F3F1EB;
+    --mid:#8A867C;
+    --hair:#2B2A26;
+    --hair-light:#D8D5CB;
+    --dur:0.6s;
+    --ease:cubic-bezier(.16,.84,.24,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Heebo',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+    cursor:default;
+  }
+  ::selection{background:var(--paper);color:var(--ink);}
+
+  h1,h2,h3,.display{
+    font-family:'Rubik',sans-serif;
+    font-weight:900;
+    letter-spacing:-0.02em;
+    line-height:0.92;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  .eyebrow{
+    font-size:12px;
+    font-weight:500;
+    letter-spacing:0.18em;
+    color:var(--mid);
+  }
+
+  /* ---------- fixed chrome ---------- */
+  .chrome{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:40;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:28px clamp(20px,4vw,48px);
+  }
+  .chrome-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    pointer-events:auto;
+  }
+  .brand{
+    font-family:'Rubik',sans-serif;
+    font-weight:900;
+    font-size:15px;
+    letter-spacing:0.02em;
+  }
+  .section-index{
+    font-size:12px;
+    color:var(--mid);
+    text-align:left;
+    direction:ltr;
+    display:flex;
+    gap:6px;
+    align-items:baseline;
+  }
+  .section-index .cur{color:var(--paper);font-weight:500;}
+  .section-index .label{
+    margin-inline-start:10px;
+    color:var(--paper);
+    font-weight:500;
+    letter-spacing:0.05em;
+    transition:opacity .3s var(--ease);
+  }
+
+  /* scroll progress rail */
+  .rail{
+    position:fixed;
+    top:0;
+    right:0;
+    width:2px;
+    height:100vh;
+    background:var(--hair);
+    z-index:41;
+  }
+  .rail-fill{
+    width:100%;
+    background:var(--paper);
+    height:0%;
+    transition:height .05s linear;
+  }
+
+  section{
+    position:relative;
+    width:100%;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:0 clamp(20px,4vw,48px);
+    position:relative;
+  }
+  .hero-title{
+    font-size:clamp(48px,11vw,168px);
+    max-width:1400px;
+  }
+  .hero-sub{
+    margin-top:28px;
+    max-width:520px;
+    font-size:clamp(16px,1.8vw,20px);
+    color:var(--mid);
+    font-weight:300;
+    line-height:1.5;
+  }
+  .scroll-cue{
+    position:absolute;
+    bottom:36px;
+    right:clamp(20px,4vw,48px);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+    color:var(--mid);
+    letter-spacing:0.1em;
+  }
+  .scroll-cue .stick{
+    width:1px;
+    height:34px;
+    background:var(--hair-light);
+    position:relative;
+    overflow:hidden;
+  }
+  .scroll-cue .stick::after{
+    content:'';
+    position:absolute;
+    top:-100%;
+    right:0;
+    width:100%;
+    height:50%;
+    background:var(--paper);
+    animation:cue 1.8s ease-in-out infinite;
+  }
+  @keyframes cue{
+    0%{top:-50%;}
+    60%{top:100%;}
+    100%{top:100%;}
+  }
+
+  /* ---------- manifesto ---------- */
+  .manifesto{
+    min-height:80vh;
+    display:flex;
+    align-items:center;
+    padding:120px clamp(20px,4vw,48px);
+    border-top:1px solid var(--hair);
+  }
+  .manifesto p{
+    font-family:'Rubik',sans-serif;
+    font-weight:500;
+    font-size:clamp(26px,4.4vw,58px);
+    line-height:1.25;
+    max-width:1180px;
+    letter-spacing:-0.01em;
+  }
+  .manifesto .accent{color:var(--mid);}
+
+  /* ---------- work / reel ---------- */
+  .work-wrap{
+    position:relative;
+    border-top:1px solid var(--hair);
+  }
+  .work-head{
+    padding:64px clamp(20px,4vw,48px) 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+  }
+  .work-head h2{
+    font-size:clamp(32px,5vw,64px);
+  }
+  .reel{
+    position:sticky;
+    top:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    padding:0 clamp(20px,4vw,48px);
+  }
+  .reel-index{
+    position:absolute;
+    top:50%;
+    left:clamp(20px,4vw,48px);
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    z-index:5;
+  }
+  .reel-index button{
+    background:none;
+    border:none;
+    color:var(--mid);
+    font-family:'Heebo',sans-serif;
+    font-size:13px;
+    letter-spacing:0.02em;
+    text-align:left;
+    direction:ltr;
+    cursor:pointer;
+    padding:4px 0;
+    transition:color .3s var(--ease);
+    opacity:0.5;
+  }
+  .reel-index button.active{
+    color:var(--paper);
+    opacity:1;
+    font-weight:500;
+  }
+
+  .card-stage{
+    position:relative;
+    width:100%;
+    height:72vh;
+  }
+  .p-card{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    gap:60px;
+    padding-inline-start:140px;
+    opacity:0;
+    transform:translateY(40px) scale(0.96);
+    transition:opacity .5s var(--ease), transform .5s var(--ease);
+    pointer-events:none;
+  }
+  .p-card.active{
+    opacity:1;
+    transform:translateY(0) scale(1);
+    pointer-events:auto;
+  }
+  .p-card .thumb{
+    aspect-ratio:4/5;
+    background:linear-gradient(155deg,#2a2924,#171712);
+    border:1px solid var(--hair);
+    position:relative;
+    overflow:hidden;
+  }
+  .p-card .thumb::after{
+    content:attr(data-num);
+    position:absolute;
+    bottom:18px;
+    left:18px;
+    font-family:'Rubik',sans-serif;
+    font-weight:900;
+    font-size:13px;
+    color:var(--mid);
+  }
+  .p-card .thumb .glyph{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Rubik',sans-serif;
+    font-weight:900;
+    font-size:120px;
+    color:var(--hair);
+    user-select:none;
+  }
+  .p-card .info .eyebrow{margin-bottom:14px;}
+  .p-card .info h3{
+    font-size:clamp(28px,3.6vw,48px);
+    margin-bottom:18px;
+  }
+  .p-card .info p{
+    color:var(--mid);
+    max-width:420px;
+    line-height:1.6;
+    font-size:15px;
+  }
+  .p-card .info .tags{
+    display:flex;
+    gap:10px;
+    margin-top:26px;
+  }
+  .p-card .info .tags span{
+    font-size:12px;
+    color:var(--mid);
+    border:1px solid var(--hair);
+    padding:6px 12px;
+    border-radius:100px;
+  }
+
+  /* grid reveal — the layout morph */
+  .grid-reveal{
+    min-height:100vh;
+    padding:80px clamp(20px,4vw,48px) 140px;
+    border-top:1px solid var(--hair);
+  }
+  .grid-reveal .eyebrow{margin-bottom:20px;}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--hair);
+    border:1px solid var(--hair);
+  }
+  .grid .cell{
+    background:var(--ink);
+    aspect-ratio:1/1;
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .6s var(--ease), transform .6s var(--ease);
+    position:relative;
+    overflow:hidden;
+  }
+  .grid .cell.in{opacity:1;transform:translateY(0);}
+  .grid .cell .n{
+    font-family:'Rubik',sans-serif;
+    font-weight:900;
+    font-size:13px;
+    color:var(--mid);
+  }
+  .grid .cell .t{
+    font-family:'Rubik',sans-serif;
+    font-weight:700;
+    font-size:18px;
+  }
+  .grid .cell:hover{background:#1a1a16;}
+
+  /* ---------- about / services split ---------- */
+  .split{
+    border-top:1px solid var(--hair);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .split > div{
+    padding:100px clamp(20px,4vw,48px);
+  }
+  .split .left{border-left:1px solid var(--hair);}
+  .split h2{
+    font-size:clamp(30px,3.4vw,44px);
+    margin-bottom:28px;
+  }
+  .split p{
+    color:var(--mid);
+    max-width:440px;
+    line-height:1.7;
+    font-size:16px;
+  }
+  .services-list{
+    margin-top:20px;
+  }
+  .services-list li{
+    list-style:none;
+    display:flex;
+    justify-content:space-between;
+    padding:18px 0;
+    border-top:1px solid var(--hair);
+    font-family:'Rubik',sans-serif;
+    font-weight:500;
+    font-size:18px;
+  }
+  .services-list li span{
+    color:var(--mid);
+    font-family:'Heebo',sans-serif;
+    font-weight:300;
+    font-size:14px;
+  }
+
+  /* ---------- contact ---------- */
+  .contact{
+    border-top:1px solid var(--hair);
+    min-height:80vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:100px clamp(20px,4vw,48px);
+  }
+  .contact .eyebrow{margin-bottom:24px;}
+  .contact a.email{
+    font-family:'Rubik',sans-serif;
+    font-weight:900;
+    font-size:clamp(32px,7.5vw,110px);
+    display:inline-block;
+    border-bottom:2px solid transparent;
+    transition:border-color .3s var(--ease), color .3s var(--ease);
+  }
+  .contact a.email:hover{
+    border-color:var(--paper);
+  }
+  .footer-row{
+    margin-top:80px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:20px;
+    color:var(--mid);
+    font-size:13px;
+  }
+  .footer-row span{color:var(--paper);}
+
+  @media (max-width:860px){
+    .chrome{padding:18px 20px;}
+    .p-card{
+      grid-template-columns:1fr;
+      padding-inline-start:0;
+      padding-top:60px;
+      gap:24px;
+    }
+    .reel-index{display:none;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .split{grid-template-columns:1fr;}
+    .split .left{border-left:none;border-bottom:1px solid var(--hair);}
+    .rail{display:none;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:0.01ms !important; animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="rail"><div class="rail-fill" id="railFill"></div></div>
+
+<div class="chrome">
+  <div class="chrome-top">
+    <div class="brand">STUDIO<span style="color:var(--mid)">°</span></div>
+    <div class="section-index">
+      <span class="cur" id="secCur">01</span><span>/</span><span id="secTotal">06</span>
+      <span class="label" id="secLabel">Home</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section class="hero" data-label="Home" id="s-hero">
+    <h1 class="hero-title" id="heroTitle">We<br>Build<br>Brands.</h1>
+    <p class="hero-sub" id="heroSub">An independent design studio. We turn ambitious ideas into visual identities that are impossible to mistake for anything else.</p>
+    <div class="scroll-cue"><span class="stick"></span>Scroll</div>
+  </section>
+
+  <section class="manifesto" data-label="Approach" id="s-manifesto">
+    <p>We're not chasing <span class="accent">another pretty logo.</span> We're after the idea that makes your brand <span class="accent">impossible to copy.</span></p>
+  </section>
+
+  <section class="work-wrap" id="s-work" data-label="Work">
+    <div class="work-head">
+      <h2>Selected Work</h2>
+      <div class="eyebrow">Scroll to move between projects</div>
+    </div>
+    <div class="reel" id="reel">
+      <div class="reel-index" id="reelIndex"></div>
+      <div class="card-stage" id="cardStage"></div>
+    </div>
+  </section>
+
+  <section class="grid-reveal" id="s-grid">
+    <div class="eyebrow">All Projects</div>
+    <div class="grid" id="projectGrid"></div>
+  </section>
+
+  <section class="split" id="s-about" data-label="About">
+    <div class="left">
+      <h2>Who We Are</h2>
+      <p>A small team of designers, strategists and writers working with brands that want to be bold. No unnecessary hierarchy, no layers of management — just people who actually touch the work.</p>
+    </div>
+    <div>
+      <h2>What We Do</h2>
+      <ul class="services-list">
+        <li>Brand Identity <span>Strategy + Visual</span></li>
+        <li>Digital Design <span>Websites & Products</span></li>
+        <li>Campaigns <span>Launches & Events</span></li>
+        <li>Typography <span>Custom Typefaces</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="contact" id="s-contact" data-label="Contact">
+    <div class="eyebrow">Got a project?</div>
+    <a class="email" id="contactEmail" href="mailto:hello@studio.co">hello@studio.co</a>
+    <div class="footer-row">
+      <span>Studio © 2026</span>
+      <span id="footerLocation">Tel Aviv — Berlin</span>
+      <span>Instagram — LinkedIn</span>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ---------------- data loading ----------------
+// Fallback content used only if the JSON files can't be fetched
+// (e.g. opening this file directly with file:// instead of via a server).
+const FALLBACK_PROJECTS = [
+  {n:'01', name:'Nava', title:'Nava — Natural Cosmetics Branding', desc:'A complete visual system for a clean skincare brand: logo, packaging, and photography language.', tags:['Branding','Packaging'], image:'', video:''},
+  {n:'02', name:'Prime', title:'Prime — Fintech App', desc:'Product design and component system for a personal finance app.', tags:['UI/UX','Product'], image:'', video:''}
+];
+const FALLBACK_SETTINGS = {
+  heroTitle: "We\nBuild\nBrands.",
+  heroSub: "An independent design studio. We turn ambitious ideas into visual identities that are impossible to mistake for anything else.",
+  email: "hello@studio.co",
+  location: "Tel Aviv — Berlin"
+};
+
+async function loadJSON(path, fallback){
+  try{
+    const res = await fetch(path, {cache:'no-store'});
+    if(!res.ok) throw new Error('bad response');
+    return await res.json();
+  }catch(e){
+    console.warn('Could not load', path, '— using default content.');
+    return fallback;
+  }
+}
+
+async function init(){
+  const [projectsData, settings] = await Promise.all([
+    loadJSON('content/projects.json', {items: FALLBACK_PROJECTS}),
+    loadJSON('content/settings.json', FALLBACK_SETTINGS)
+  ]);
+  const projects = projectsData.items || FALLBACK_PROJECTS;
+
+  // ---- inject settings into the page ----
+  document.getElementById('heroTitle').innerHTML = (settings.heroTitle || '').split('\n').join('<br>');
+  document.getElementById('heroSub').textContent = settings.heroSub || '';
+  const emailEl = document.getElementById('contactEmail');
+  emailEl.textContent = settings.email || '';
+  emailEl.href = 'mailto:' + (settings.email || '');
+  document.getElementById('footerLocation').textContent = settings.location || '';
+
+  buildSite(projects);
+}
+
+function buildSite(projects){
+// build reel index buttons
+const reelIndex = document.getElementById('reelIndex');
+projects.forEach((p,i)=>{
+  const b = document.createElement('button');
+  b.textContent = p.n + ' — ' + p.name;
+  b.dataset.i = i;
+  b.addEventListener('click', ()=> jumpToProject(i));
+  reelIndex.appendChild(b);
+});
+
+// build cards
+const stage = document.getElementById('cardStage');
+projects.forEach((p,i)=>{
+  const card = document.createElement('div');
+  card.className = 'p-card';
+  card.dataset.i = i;
+  let media = `<div class="glyph">${p.name[0]}</div>`;
+  if(p.video){
+    media = `<iframe src="${p.video}${p.video.includes('?')?'&':'?'}background=1&autoplay=1&loop=1&muted=1"
+      frameborder="0" allow="autoplay; fullscreen" loading="lazy"
+      style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></iframe>`;
+  } else if(p.image){
+    media = `<img src="${p.image}" alt="${p.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`;
+  }
+  card.innerHTML = `
+    <div class="thumb" data-num="${p.n}">${media}</div>
+    <div class="info">
+      <div class="eyebrow">${p.n} / ${String(projects.length).padStart(2,'0')}</div>
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+      <div class="tags">${p.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+    </div>`;
+  stage.appendChild(card);
+});
+const cards = [...stage.querySelectorAll('.p-card')];
+const idxBtns = [...reelIndex.querySelectorAll('button')];
+
+// build grid
+const grid = document.getElementById('projectGrid');
+projects.forEach(p=>{
+  const cell = document.createElement('div');
+  cell.className = 'cell';
+  cell.innerHTML = `<span class="n">${p.n}</span><span class="t">${p.name}</span>`;
+  grid.appendChild(cell);
+});
+const cells = [...grid.querySelectorAll('.cell')];
+
+// reel scroll height: give each project a full viewport of scroll room
+const reelWrap = document.getElementById('s-work');
+function sizeReel(){
+  reelWrap.style.paddingBottom = (projects.length * 100) + 'vh';
+}
+sizeReel();
+
+let activeProject = -1;
+function setActive(i){
+  if(i === activeProject) return;
+  activeProject = i;
+  cards.forEach((c,ci)=> c.classList.toggle('active', ci===i));
+  idxBtns.forEach((b,bi)=> b.classList.toggle('active', bi===i));
+}
+
+function jumpToProject(i){
+  const reelTop = reelWrap.getBoundingClientRect().top + window.scrollY;
+  const per = window.innerHeight;
+  window.scrollTo({top: reelTop + i*per + per*0.5, behavior:'smooth'});
+}
+
+// grid cell reveal
+const gridObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+    }
+  });
+},{threshold:0.15});
+cells.forEach(c=>gridObserver.observe(c));
+
+// nav label + section counter via IntersectionObserver
+const navSections = [...document.querySelectorAll('main > section')];
+const secCur = document.getElementById('secCur');
+const secLabel = document.getElementById('secLabel');
+const secTotal = document.getElementById('secTotal');
+secTotal.textContent = String(navSections.length).padStart(2,'0');
+const navObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && e.intersectionRatio > 0.4){
+      const i = navSections.indexOf(e.target);
+      secCur.textContent = String(i+1).padStart(2,'0');
+      secLabel.textContent = e.target.dataset.label || '';
+    }
+  });
+},{threshold:[0.4,0.6]});
+navSections.forEach(s=>navObserver.observe(s));
+
+// scroll driven: rail fill + active reel card
+const railFill = document.getElementById('railFill');
+let ticking = false;
+function onScroll(){
+  if(ticking) return;
+  ticking = true;
+  requestAnimationFrame(()=>{
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop;
+    const max = doc.scrollHeight - window.innerHeight;
+    railFill.style.height = (max>0 ? (scrolled/max*100) : 0) + '%';
+
+    // determine active project based on reel section scroll progress
+    const rect = reelWrap.getBoundingClientRect();
+    const per = window.innerHeight;
+    const total = projects.length;
+    // progress: how far we've scrolled INTO the reel wrap, in viewport units
+    const scrolledInto = -rect.top;
+    if(rect.top <= 0 && rect.bottom > per){
+      let i = Math.floor(scrolledInto / per);
+      i = Math.max(0, Math.min(total-1, i));
+      setActive(i);
+    } else if(rect.top > 0){
+      setActive(-1);
+      cards.forEach(c=>c.classList.remove('active'));
+      idxBtns.forEach(b=>b.classList.remove('active'));
+    }
+
+    ticking = false;
+  });
+}
+document.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+window.addEventListener('resize', sizeReel);
+} // end buildSite
+
+init();
+</script>
+
+</body>
+</html>
