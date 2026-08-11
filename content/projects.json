@@ -1,6 +1,6 @@
 {
   "items": [
-    { "n": "01", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
+    { "n": "01", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "", "video": "" },
     { "n": "02", "name": "Prime", "title": "Prime — Fintech App", "desc": "Product design and component system for a personal finance app.", "tags": ["UI/UX", "Product"], "image": "", "video": "" },
     { "n": "03", "name": "The Barn", "title": "The Barn — Chef's Restaurant", "desc": "Full identity, menu, and signage for a new restaurant in the heart of the city.", "tags": ["Branding", "Print"], "image": "", "video": "" },
     { "n": "04", "name": "Kōline", "title": "Kōline — Mobility Startup", "desc": "Sharp tech branding for a shared electric-scooter company.", "tags": ["Branding", "Digital"], "image": "", "video": "" },
