@@ -1,9 +1,9 @@
 {
   "items": [
-    { "n": "01", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
-   { "n": "02", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
-      { "n": "03", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
-      { "n": "04", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
+{ "n": "01", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
+{ "n": "02", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
+{ "n": "03", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
+{ "n": "04", "name": "Laba", "title": "Laba — Natural Cosmetics Branding", "desc": "A complete visual system for a clean skincare brand: logo, packaging, and photography language.", "tags": ["Branding", "Packaging"], "image": "/images/uploads/RENDER_3.2.gif", "video": "" },
     { "n": "05", "name": "Aura", "title": "Aura — Art Festival", "desc": "A dynamic visual language for an annual urban light festival.", "tags": ["Campaign", "Motion"], "image": "", "video": "" },
     { "n": "06", "name": "Studio 12", "title": "Studio 12 — Art Gallery", "desc": "A minimal identity and portfolio site for an independent gallery.", "tags": ["Branding", "Website"], "image": "", "video": "" }
   ]
