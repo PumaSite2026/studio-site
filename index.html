@@ -647,16 +647,6 @@ function jumpToProject(i){
   window.scrollTo({top, behavior:'smooth'});
 }
 
-// reliably detect which project's spacer is centered in the viewport
-const spacerObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      setActive(Number(e.target.dataset.i));
-    }
-  });
-},{threshold:0, rootMargin:'-50% 0px -50% 0px'});
-spacers.forEach(sp=>spacerObserver.observe(sp));
-
 // grid cell reveal
 const gridObserver = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
@@ -695,6 +685,30 @@ function onScroll(){
     const scrolled = doc.scrollTop;
     const max = doc.scrollHeight - window.innerHeight;
     railFill.style.height = (max>0 ? (scrolled/max*100) : 0) + '%';
+
+    // find which spacer's vertical center is closest to the viewport center
+    const viewportCenter = window.innerHeight / 2;
+    let closestIdx = -1;
+    let closestDist = Infinity;
+    spacers.forEach((sp,i)=>{
+      const r = sp.getBoundingClientRect();
+      const center = r.top + r.height/2;
+      const dist = Math.abs(center - viewportCenter);
+      if(dist < closestDist){
+        closestDist = dist;
+        closestIdx = i;
+      }
+    });
+    const firstRect = spacers[0].getBoundingClientRect();
+    const lastRect = spacers[spacers.length-1].getBoundingClientRect();
+    if(firstRect.top < window.innerHeight && lastRect.bottom > 0){
+      setActive(closestIdx);
+    } else {
+      setActive(-1);
+      cards.forEach(c=>c.classList.remove('active'));
+      idxBtns.forEach(b=>b.classList.remove('active'));
+    }
+
     ticking = false;
   });
 }
