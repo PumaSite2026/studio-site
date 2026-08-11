@@ -31,7 +31,7 @@
     --ease:cubic-bezier(.16,.84,.24,1);
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; overflow-x:hidden;}
   body{
     background:var(--ink);
     color:var(--paper);
@@ -321,6 +321,10 @@
     border-radius:100px;
   }
 
+  /* invisible scroll-trigger regions, one per project */
+  .reel-spacers{position:relative;}
+  .reel-spacer{height:100vh;}
+
   /* grid reveal — the layout morph */
   .grid-reveal{
     min-height:100vh;
@@ -489,6 +493,7 @@
       <div class="reel-index" id="reelIndex"></div>
       <div class="card-stage" id="cardStage"></div>
     </div>
+    <div class="reel-spacers" id="reelSpacers"></div>
   </section>
 
   <section class="grid-reveal" id="s-grid">
@@ -616,12 +621,16 @@ projects.forEach(p=>{
 });
 const cells = [...grid.querySelectorAll('.cell')];
 
-// reel scroll height: give each project a full viewport of scroll room
-const reelWrap = document.getElementById('s-work');
-function sizeReel(){
-  reelWrap.style.paddingBottom = (projects.length * 100) + 'vh';
-}
-sizeReel();
+// ---- scroll-trigger spacers: one invisible 100vh region per project ----
+const spacerWrap = document.getElementById('reelSpacers');
+const spacers = [];
+projects.forEach((p,i)=>{
+  const sp = document.createElement('div');
+  sp.className = 'reel-spacer';
+  sp.dataset.i = i;
+  spacerWrap.appendChild(sp);
+  spacers.push(sp);
+});
 
 let activeProject = -1;
 function setActive(i){
@@ -632,10 +641,21 @@ function setActive(i){
 }
 
 function jumpToProject(i){
-  const reelTop = reelWrap.getBoundingClientRect().top + window.scrollY;
-  const per = window.innerHeight;
-  window.scrollTo({top: reelTop + i*per + per*0.5, behavior:'smooth'});
+  const target = spacers[i];
+  const top = target.getBoundingClientRect().top + window.scrollY
+              - (window.innerHeight/2) + (target.offsetHeight/2);
+  window.scrollTo({top, behavior:'smooth'});
 }
+
+// reliably detect which project's spacer is centered in the viewport
+const spacerObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      setActive(Number(e.target.dataset.i));
+    }
+  });
+},{threshold:0, rootMargin:'-50% 0px -50% 0px'});
+spacers.forEach(sp=>spacerObserver.observe(sp));
 
 // grid cell reveal
 const gridObserver = new IntersectionObserver((entries)=>{
@@ -664,7 +684,7 @@ const navObserver = new IntersectionObserver((entries)=>{
 },{threshold:[0.4,0.6]});
 navSections.forEach(s=>navObserver.observe(s));
 
-// scroll driven: rail fill + active reel card
+// scroll driven: rail progress bar only
 const railFill = document.getElementById('railFill');
 let ticking = false;
 function onScroll(){
@@ -675,29 +695,11 @@ function onScroll(){
     const scrolled = doc.scrollTop;
     const max = doc.scrollHeight - window.innerHeight;
     railFill.style.height = (max>0 ? (scrolled/max*100) : 0) + '%';
-
-    // determine active project based on reel section scroll progress
-    const rect = reelWrap.getBoundingClientRect();
-    const per = window.innerHeight;
-    const total = projects.length;
-    // progress: how far we've scrolled INTO the reel wrap, in viewport units
-    const scrolledInto = -rect.top;
-    if(rect.top <= 0 && rect.bottom > per){
-      let i = Math.floor(scrolledInto / per);
-      i = Math.max(0, Math.min(total-1, i));
-      setActive(i);
-    } else if(rect.top > 0){
-      setActive(-1);
-      cards.forEach(c=>c.classList.remove('active'));
-      idxBtns.forEach(b=>b.classList.remove('active'));
-    }
-
     ticking = false;
   });
 }
 document.addEventListener('scroll', onScroll, {passive:true});
 onScroll();
-window.addEventListener('resize', sizeReel);
 } // end buildSite
 
 init();
